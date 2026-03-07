@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1031618891728",
+    "project_id": "baby-checklist-app",
+    "storage_bucket": "baby-checklist-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1031618891728:android:029f3765de7aaa8232b3d5",
+        "android_client_info": {
+          "package_name": "com.example.apdp_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQeKhLUhwsYcIfvTaftGXJt-h5n14qb-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
