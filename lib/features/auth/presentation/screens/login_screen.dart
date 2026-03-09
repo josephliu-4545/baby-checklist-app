@@ -1,11 +1,53 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/ui/app_spacing.dart';
+import '../controllers/auth_controller.dart';
 import '../../../../services/di/service_locator.dart';
 import 'register_screen.dart';
 
+abstract class LoginAuthController implements Listenable {
+  bool get isLoading;
+
+  String? get errorMessage;
+
+  Future<bool> login(String email, String password);
+}
+
+class _AuthControllerAdapter extends ChangeNotifier
+    implements LoginAuthController {
+  final AuthController _delegate;
+  late final VoidCallback _listener;
+
+  _AuthControllerAdapter(this._delegate) {
+    _listener = notifyListeners;
+    _delegate.addListener(_listener);
+  }
+
+  @override
+  void dispose() {
+    _delegate.removeListener(_listener);
+    super.dispose();
+  }
+
+  @override
+  bool get isLoading => _delegate.isLoading;
+
+  @override
+  String? get errorMessage => _delegate.errorMessage;
+
+  @override
+  Future<bool> login(String email, String password) {
+    return _delegate.login(email, password);
+  }
+}
+
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final LoginAuthController? authController;
+
+  const LoginScreen({
+    super.key,
+    this.authController,
+  });
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -14,13 +56,30 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final authController = ServiceLocator.I.authController;
+  late final LoginAuthController authController;
+  late final bool _ownsAuthController;
 
   bool _obscurePassword = true;
   String? _localErrorMessage;
 
   @override
+  void initState() {
+    super.initState();
+    final injected = widget.authController;
+    if (injected != null) {
+      authController = injected;
+      _ownsAuthController = false;
+    } else {
+      authController = _AuthControllerAdapter(ServiceLocator.I.authController);
+      _ownsAuthController = true;
+    }
+  }
+
+  @override
   void dispose() {
+    if (_ownsAuthController && authController is ChangeNotifier) {
+      (authController as ChangeNotifier).dispose();
+    }
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
