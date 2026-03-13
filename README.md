@@ -34,6 +34,35 @@ A Flutter app for managing a baby-preparation checklist with a soft pastel theme
 - `lib/features/**`
   - Feature-first folders (`auth`, `items`) with data/domain/presentation layers
 
+## Key files (quick map)
+
+- **App entry / Firebase init**
+  - `lib/main.dart`
+- **Auth routing**
+  - `lib/navigation/auth_gate.dart`
+- **Bottom navigation shell**
+  - `lib/navigation/main_shell.dart`
+- **Auth UI**
+  - `lib/features/auth/presentation/screens/welcome_screen.dart`
+  - `lib/features/auth/presentation/screens/login_screen.dart`
+  - `lib/features/auth/presentation/screens/register_screen.dart`
+  - `lib/features/auth/presentation/screens/profile_screen.dart`
+- **Items UI**
+  - `lib/features/items/presentation/screens/home_screen.dart`
+  - `lib/features/items/presentation/screens/add_item_screen.dart`
+  - `lib/features/items/presentation/screens/item_detail_screen.dart`
+  - `lib/features/items/presentation/screens/delegation_screen.dart`
+- **Controllers (ChangeNotifier)**
+  - `lib/features/auth/presentation/controllers/auth_controller.dart`
+  - `lib/features/items/presentation/controllers/item_controller.dart`
+- **Firestore persistence**
+  - `lib/features/items/data/datasources/item_firestore_datasource.dart`
+  - `lib/features/items/data/repositories/item_repository_impl.dart`
+- **Notifications (SMS adapter)**
+  - `lib/services/notification/notification_service.dart`
+  - `lib/services/notification/sms_adapter.dart`
+  - `lib/services/notification/sms_mock_adapter.dart`
+
 ## Setup
 
 ### 1) Prerequisites
@@ -95,3 +124,35 @@ the device SMS composer using an `sms:` link (user manually taps **Send**).
 - Requires `url_launcher` and, on Android 11+, package visibility `<queries>` entries for `sms`/`smsto`
 
 If you add the dependency or change `AndroidManifest.xml`, do a **full stop and rerun** (hot restart is not enough).
+
+## Automated tests (P7)
+
+This project includes unit, widget, and integration tests.
+
+### Test folders
+
+- `test/`
+  - Unit + widget tests
+- `integration_test/`
+  - Integration tests (run on Windows desktop / emulator / physical device)
+
+### Test files included
+
+- **Unit test** (use case)
+  - `test/unit/mark_purchased_test.dart`
+- **Widget test** (Login validation)
+  - `test/widget/login_screen_test.dart`
+- **Integration test** (startup flow)
+  - `integration_test/app_flow_test.dart`
+
+### Run tests
+
+- Run unit + widget tests:
+  - `flutter test`
+
+- Run integration test on Windows desktop:
+  - `flutter test integration_test -d windows`
+
+### Integration test note (Web)
+
+`integration_test` is not supported on web devices (Chrome/Edge) via `flutter test`.
